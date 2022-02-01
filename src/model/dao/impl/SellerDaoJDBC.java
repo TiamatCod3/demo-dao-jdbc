@@ -55,7 +55,7 @@ public class SellerDaoJDBC implements SellerDao {
 		} finally {
 			DB.closeResultSet(rs);
 			DB.closeStatement(st);
-			DB.closeConnection();
+
 		}
 	}
 
@@ -65,11 +65,10 @@ public class SellerDaoJDBC implements SellerDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		String sql = "UPDATE seller\r\n"
-				+ "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ?\r\n"
-				+ "WHERE Id = ?";
+				+ "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ?\r\n" + "WHERE Id = ?";
 		try {
 			st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			
+
 			st.setString(1, obj.getName());
 			st.setString(2, obj.getEmail());
 			st.setDate(3, new java.sql.Date(obj.getBirthDate().getTime()));
@@ -94,14 +93,27 @@ public class SellerDaoJDBC implements SellerDao {
 		} finally {
 			DB.closeResultSet(rs);
 			DB.closeStatement(st);
-			DB.closeConnection();
+
 		}
 
 	}
 
 	@Override
-	public void deleteById(Integer Id) {
-		// TODO Auto-generated method stub
+	public void deleteById(Integer id) {
+		PreparedStatement st = null;
+		String sql = "DELETE FROM seller " + "WHERE Id = ?";
+		try {
+			st = conn.prepareStatement(sql);
+			st.setInt(1, id);
+
+			st.execute();
+
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+
+		}
 
 	}
 
