@@ -1,5 +1,6 @@
 package application;
 
+import java.util.List;
 import java.util.Scanner;
 
 import model.dao.DaoFactory;
@@ -15,7 +16,7 @@ public class Program2 {
 		DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
 		
 		System.out.println("==== TEST 1: department findBy ====");
-		Department department = departmentDao.findById(6);
+		Department department = departmentDao.findById(3);
 		System.out.println(department);
 //		
 //		System.out.println("\n==== TEST 2: department findByDepartment ====");
@@ -25,22 +26,20 @@ public class Program2 {
 //			System.out.println(obj);
 //		}
 //		
-//		System.out.println("\n==== TEST 3: department findAll ====");
-//		list = departmentDao.findAll();
-//		for (Department obj: list) {
-//			System.out.println(obj);
-//		}
+		System.out.println("\n==== TEST 3: department findAll ====");
+		List<Department> list = departmentDao.findAll();
+		for (Department obj: list) {
+			System.out.println(obj);
+		}
 //		
-//		System.out.println("\n==== TEST 3: department findAll ====");
-//		list = departmentDao.findAll();
-//		for (Department obj: list) {
-//			System.out.println(obj);
-//		}
 //		
-//		System.out.println("\n==== TEST 4: department insert ====");
-//		Department newDepartment = new Department(null, "Greg", "greg@gmail.com", new Date(), 3500.00, department);
-//		departmentDao.insert(newDepartment);
-//		System.out.println("Inserted! new Id =  " + newDepartment.getId());
+		System.out.println("\n==== TEST 4: department insert ====");
+		Department newDepartment = new Department(null, "Cloths");
+		departmentDao.insert(newDepartment);
+		department = departmentDao.findById(newDepartment.getId());
+		System.out.println("Inserted! new Id =  " + newDepartment.getId());
+		System.out.println(department);
+		
 //		
 //		System.out.println("\n==== TEST 5: department update ====");
 //		department = departmentDao.findById(1);
