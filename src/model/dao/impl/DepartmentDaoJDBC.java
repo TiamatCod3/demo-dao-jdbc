@@ -25,15 +25,47 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 	public void insert(Department obj) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
-		String sql = "INSERT INTO department "
-				+ "(Name)"
-				+ "VALUES "
-				+ "(?)";
+		String sql = "INSERT INTO department " + "(Name)" + "VALUES " + "(?)";
+		try {
+			st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+			st.setString(1, obj.getName());
+			int rowsAffected = st.executeUpdate();
+			if (rowsAffected > 0) {
+				rs = st.getGeneratedKeys();
+				if (rs.next()) {
+					int id = rs.getInt(1);
+					obj.setId(id);
+				}
+			} else {
+				throw new DbException("Unexpected error! No rows affected");
+			}
+
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+
+	}
+
+	@Override
+	public void update(Department obj) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		String sql = "UPDATE department "
+				+ "SET Name = ? "
+				+ "WHERE Id = ? ";
 		try {
 			st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			
 			st.setString(1, obj.getName());
+			st.setInt(2, obj.getId());
+			
 			int rowsAffected = st.executeUpdate();
+			
 			if(rowsAffected>0) {
 				rs = st.getGeneratedKeys();
 				if(rs.next()) {
@@ -41,27 +73,32 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 					obj.setId(id);
 				}
 			}else {
-					throw new DbException("Unexpected error! No rows affected");
+				throw new DbException("Unexpected error! No rows affected");
 			}
-			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
 		}finally {
 			DB.closeResultSet(rs);
 			DB.closeStatement(st);
 		}
-		
 	}
 
 	@Override
-	public void update(Department obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void deleteById(Integer Id) {
-		// TODO Auto-generated method stub
+	public void deleteById(Integer id) {
+		PreparedStatement st = null;
+		String sql = "DELETE from department "
+				+ "WHERE Id = ? ";
+		try {
+			st = conn.prepareStatement(sql);
+			st.setInt(1, id);
+			
+			st.execute();
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			DB.closeStatement(st);
+		}
 
 	}
 

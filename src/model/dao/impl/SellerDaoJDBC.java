@@ -64,7 +64,7 @@ public class SellerDaoJDBC implements SellerDao {
 
 		PreparedStatement st = null;
 		ResultSet rs = null;
-		String sql = "UPDATE seller\r\n"
+		String sql = "UPDATE seller "
 				+ "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ?\r\n" + "WHERE Id = ?";
 		try {
 			st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
